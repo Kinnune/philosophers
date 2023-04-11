@@ -6,43 +6,79 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:23:53 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/03/30 14:52:32 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/11 11:59:58 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	parse_input(int argc, char **argv, t_rules *rules)
+t_philo *make_philo(t_rules *rules, int id)
 {
-	for (int i = 0; i < 3; i++)
-	{
-		printf("%u\n", *(((unsigned int *)rules) + i));
-	}
-	if (argc != 5 || argc != 6)
-		return (-1);
-	while (*argv)
-	{
-		if (**argv == '+')
-			(*argv)++;
-		while (**argv)
-		{
-			if (**argv < '0' || **argv > '9')
-				return (-1);
-		}
-		argv++;
-	}
-	return (0);
+	t_philo *philo;
+
+	philo = malloc(sizeof(t_philo));
+	if (!philo)
+		return (NULL);
+	philo->id = id;
+	philo->next = NULL;
+	philo->prev = NULL;
+	if (pthread_mutex_init(&philo->fork, NULL));
+		return (NULL);
+	return (philo);
 }
 
-int	main(int argv, char **argc)
+t_philo	*set_table(t_fork *forks, t_rules *rules)
 {
-	t_rules rules;
-	rules.num_phil = 69123;
-	rules.to_die = 0;
-	rules.to_eat = 42;
+	int	i;
+	t_philo *head;
+	t_philo *philos;
 
-	if (parse_input(argv, argc, &rules) < 0)
+	philos = make_philo(rules, 1);
+	if (!philos)
+		return (NULL);
+	head = philos;
+	i = 0;
+	while (i < rules->num_phil - 1)
+	{
+		philos->next = make_philo(rules, i + 2);
+		if (!philos->next)
+			return (NULL);
+		philos->next->prev = philos;
+		philos = philos->next;
+		i++;
+	}
+	philos->next = head;
+	return (head);
+}
+
+int	main(int argc, char **argv)
+{
+	t_philo	*philos;
+	t_fork	*forks;
+	t_rules	rules;
+	struct timeval clock;
+	long start_ms;
+	long current_ms;
+
+
+	gettimeofday(&clock, NULL);
+	start_ms = clock.tv_sec + (clock.tv_usec / 1000000);
+	sleep(5);
+	// gettimeofday(&clock, NULL);
+	// current_ms = (clock.tv_sec + (clock.tv_usec / 1000000)) - start_ms;
+printf("clock tv_sec = %li\nclock tv_usec = %i\nstart_ms = %li\ncurrent_ms = %li\n", clock.tv_sec, clock.tv_usec, start_ms, current_ms);
+	if (parse_input(argc, argv, &rules) < 0)
 		return (0);
+	philos = set_table(forks, &rules);
 
+printf("num_phil = %d, time_die = %d, time_eat = %d, time_sleep = %d, must_eat = %d\n",
+rules.num_phil, rules.ms_die, rules.ms_eat, rules.ms_sleep, rules.max_eat);
+
+	while(philos->id != rules.num_phil)
+	{
+		printf("%d\n", philos->id);
+		philos = philos->next;
+	}
+	printf("%d\n", philos->id);
 	return (0);
 }
