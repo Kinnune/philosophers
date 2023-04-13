@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/11 11:46:23 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/13 11:22:45 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef struct s_philo
 	pthread_mutex_t	fork;
 	struct s_philo	*next;
 	struct s_philo	*prev;
+	// pthread_mutex_t	*left;
+	// pthread_mutex_t	*right;
 }	t_philo;
 
 typedef struct s_rules
@@ -45,6 +47,10 @@ typedef struct s_rules
 	int max_eat;
 }	t_rules;
 
+
+//philostuffer.c
+t_philo *make_philo(t_rules *rules, int id);
+t_philo	*set_table(t_fork *forks, t_rules *rules);
 
 //input.c
 int	atoi_philo(const char *str);
@@ -69,6 +75,9 @@ external functions
 	pthread_mutex_destroy
 	pthread_mutex_lock
 	pthread_mutex_unlock
+
+jokatoinen filo ottaa ensin vasemman
+
 */
 
 # endif
