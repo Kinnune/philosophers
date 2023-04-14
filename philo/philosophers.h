@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/13 11:22:45 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:46:17 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_philo
 	pthread_mutex_t	fork;
 	struct s_philo	*next;
 	struct s_philo	*prev;
+	unsigned int hunger;
 	// pthread_mutex_t	*left;
 	// pthread_mutex_t	*right;
 }	t_philo;
@@ -56,6 +57,13 @@ t_philo	*set_table(t_fork *forks, t_rules *rules);
 int	atoi_philo(const char *str);
 int	parse_input(int argc, char **argv, t_rules *rules);
 
+//testing.c
+void	*test_print();
+pthread_mutex_t test_lock;
+
+//time.c
+unsigned int time_difference(struct timeval start_time);
+
 
 /*
 external functions
@@ -76,7 +84,7 @@ external functions
 	pthread_mutex_lock
 	pthread_mutex_unlock
 
-jokatoinen filo ottaa ensin vasemman
+filo & 1 ottaa ensin vasemman
 
 */
 

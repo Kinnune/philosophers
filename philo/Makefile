@@ -1,7 +1,7 @@
 
 NAME = philo
 
-CFILES = main.c input.c philostuffer.c
+CFILES = main.c input.c philostuffer.c testing.c time.c
 
 OFILES = $(CFILES:.c=.o)
 
