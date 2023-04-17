@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/14 14:46:17 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/17 12:22:32 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ typedef struct s_philo
 	pthread_mutex_t	fork;
 	struct s_philo	*next;
 	struct s_philo	*prev;
-	unsigned int hunger;
-	// pthread_mutex_t	*left;
-	// pthread_mutex_t	*right;
+	unsigned long ate_at;
+	pthread_t thread_id;
+	pthread_mutex_t	*left;
+	pthread_mutex_t	*right;
 }	t_philo;
 
 typedef struct s_rules
@@ -46,6 +47,8 @@ typedef struct s_rules
 	unsigned int ms_eat;
 	unsigned int ms_sleep;
 	int max_eat;
+	unsigned long start_ms;
+	struct timeval start_clock;
 }	t_rules;
 
 
@@ -62,8 +65,8 @@ void	*test_print();
 pthread_mutex_t test_lock;
 
 //time.c
-unsigned int time_difference(struct timeval start_time);
-
+unsigned int timestamp(struct timeval start_time);
+unsigned long timeval_to_ms(struct timeval clock);
 
 /*
 external functions

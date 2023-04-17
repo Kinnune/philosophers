@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:35:31 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/14 13:49:00 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/17 11:11:35 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_philo *make_philo(t_rules *rules, int id)
 		free(philo);
 		return (NULL);
 	}
+	philo->right = &philo->fork;	
 	return (philo);
 }
 
@@ -51,8 +52,11 @@ t_philo	*set_table(t_fork *forks, t_rules *rules)
 		}
 		philos->next->prev = philos;
 		philos = philos->next;
+		philos->left = &philos->prev->fork;
 		i++;
 	}
 	philos->next = head;
+	head->prev = philos;
+	head->left = &head->prev->fork;
 	return (head);
 }
