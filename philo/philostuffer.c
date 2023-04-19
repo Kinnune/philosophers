@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:35:31 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/17 11:11:35 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/18 14:03:23 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,21 @@ t_philo *make_philo(t_rules *rules, int id)
 	if (!philo)
 		return (NULL);
 	philo->id = id;
+	philo->max_eat = rules->max_eat;
 	philo->next = NULL;
 	philo->prev = NULL;
-	if (pthread_mutex_init(&philo->fork, NULL))
+	if (pthread_mutex_init(&philo->fork, NULL) 
+		|| pthread_mutex_init(&philo->ate_mutex, NULL))
 	{
 		free(philo);
 		return (NULL);
 	}
-	philo->right = &philo->fork;	
+	philo->right = &philo->fork;
+	philo->rules = rules;
 	return (philo);
 }
 
-t_philo	*set_table(t_fork *forks, t_rules *rules)
+t_philo	*set_table(t_rules *rules)
 {
 	int	i;
 	t_philo *head;

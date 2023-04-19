@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/17 12:22:32 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/19 16:10:26 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,6 @@ typedef struct s_fork
 	struct s_fork	*prev;
 }	t_fork;
 
-typedef struct s_philo
-{
-	unsigned int id;
-	pthread_mutex_t	fork;
-	struct s_philo	*next;
-	struct s_philo	*prev;
-	unsigned long ate_at;
-	pthread_t thread_id;
-	pthread_mutex_t	*left;
-	pthread_mutex_t	*right;
-}	t_philo;
-
 typedef struct s_rules
 {
 	unsigned int num_phil;
@@ -51,10 +39,24 @@ typedef struct s_rules
 	struct timeval start_clock;
 }	t_rules;
 
+typedef struct s_philo
+{
+	unsigned int id;
+	int max_eat;
+	pthread_mutex_t	fork;
+	struct s_philo	*next;
+	struct s_philo	*prev;
+	unsigned long ate_at;
+	pthread_t thread_id;
+	pthread_mutex_t	*left;
+	pthread_mutex_t	*right;
+	pthread_mutex_t	ate_mutex;
+	t_rules *rules;
+}	t_philo;
 
 //philostuffer.c
 t_philo *make_philo(t_rules *rules, int id);
-t_philo	*set_table(t_fork *forks, t_rules *rules);
+t_philo	*set_table(t_rules *rules);
 
 //input.c
 int	atoi_philo(const char *str);
@@ -65,8 +67,9 @@ void	*test_print();
 pthread_mutex_t test_lock;
 
 //time.c
-unsigned int timestamp(struct timeval start_time);
-unsigned long timeval_to_ms(struct timeval clock);
+unsigned long	timestamp(struct timeval start_time);
+unsigned long	timeval_to_ms(struct timeval clock);
+void			mssleep(int ms);
 
 /*
 external functions
