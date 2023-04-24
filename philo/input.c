@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:27:23 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/17 11:40:39 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/24 12:05:49 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	parse_input(int argc, char **argv, t_rules *rules)
 		rules->max_eat = val_check;
 	}
 	else
-		rules->max_eat = -1;	
+		rules->max_eat = -1;
+	pthread_mutex_init(&rules->start_mutex, NULL);
 	return (0);
 }

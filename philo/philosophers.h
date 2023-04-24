@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/19 16:10:26 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/24 12:05:08 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_rules
 	unsigned int ms_sleep;
 	int max_eat;
 	unsigned long start_ms;
+	pthread_mutex_t	start_mutex;
 	struct timeval start_clock;
 }	t_rules;
 
