@@ -6,20 +6,20 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 14:44:12 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/24 10:09:27 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/25 10:36:17 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-unsigned long	timestamp(struct timeval start_time)
+unsigned long	timestamp(struct timeval start_clock)
 {
-	struct timeval	current_time;
+	struct timeval	current_clock;
 
-	gettimeofday(&current_time, NULL);
-	current_time.tv_sec -= start_time.tv_sec;
-	current_time.tv_usec -= (start_time.tv_usec + 500);
-	return (timeval_to_ms(current_time));
+	gettimeofday(&current_clock, NULL);
+	current_clock.tv_sec -= start_clock.tv_sec;
+	current_clock.tv_usec -= (start_clock.tv_usec + 500);
+	return (timeval_to_ms(current_clock));
 }
 
 unsigned long	timeval_to_ms(struct timeval clock)
@@ -34,5 +34,5 @@ void	mssleep(int ms)
 	gettimeofday(&clock, NULL);
 	usleep((ms * 0.8) * 1000);
 	while (timestamp(clock) < ms)
-		usleep(100);
+		;
 }

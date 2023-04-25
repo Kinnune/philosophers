@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:23:53 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/24 15:41:30 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/25 10:27:35 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void *life_of_philo(void *args)
 	t_rules rules = *(philo->rules);
 
 
-	pthread_mutex_lock(&(rules.start_mutex));
-	pthread_mutex_unlock(&(rules.start_mutex));
+	// pthread_mutex_lock(&(rules.start_mutex));
+	// pthread_mutex_unlock(&(rules.start_mutex));
 	if (philo->id & 1)
 		mssleep(5);
 	while (1)
@@ -43,14 +43,14 @@ void *life_of_philo(void *args)
 		philo->ate_at = timestamp(rules.start_clock);
 		if (philo->max_eat > 0)
 			philo->max_eat--;
-		pthread_mutex_unlock(&(philo->ate_mutex));	
+		pthread_mutex_unlock(&(philo->ate_mutex));
 		mssleep(rules.ms_eat);
 		pthread_mutex_unlock(philo->left);
 		pthread_mutex_unlock(philo->right);
 		printf("%lu %u is sleeping\n", timestamp(rules.start_clock), philo->id);
 		mssleep(rules.ms_sleep);
 		printf("%lu %u is thinking\n", timestamp(rules.start_clock), philo->id);
-		mssleep(1);
+		// mssleep(1);
 	}
 	return (NULL);
 }
@@ -85,18 +85,18 @@ rules.num_phil, rules.ms_die, rules.ms_eat, rules.ms_sleep, rules.max_eat);
 	pthread_mutex_unlock(&(rules.start_mutex));
 	pthread_mutex_lock(&(philo_loop->ate_mutex));
 	full_philos = 0;
-	while (((timestamp(start_clock) - philo_loop->ate_at) < rules.ms_die
-			&& philo_loop->max_eat != 0)
-			|| full_philos < rules.num_phil)
+	while ((timestamp(start_clock) - philo_loop->ate_at) < rules.ms_die || full_philos < rules.num_phil)
 	{
+		pthread_mutex_unlock(&(philo_loop->ate_mutex));
 		if (philo_loop->id == 1)
 			full_philos = 0;
-		pthread_mutex_unlock(&(philo_loop->ate_mutex));
+		pthread_mutex_lock(&(philo_loop->ate_mutex));
 		if (philo_loop->max_eat == 0)
 			full_philos++;
+		pthread_mutex_unlock(&(philo_loop->ate_mutex));
 		philo_loop = philo_loop->next;
-		pthread_mutex_lock(&(philo_loop->ate_mutex));
 	}
+// 	printf("test\n");
 	if (full_philos == rules.num_phil)
 		printf("%lu everone finished", timestamp(start_clock));		
 	else
