@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/25 10:55:21 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/27 15:10:02 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,6 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
-
-typedef struct s_fork
-{
-	pthread_mutex_t lock;
-	int	id;
-	int	taken;
-	struct s_fork	*next;
-	struct s_fork	*prev;
-}	t_fork;
 
 typedef struct s_rules
 {
@@ -56,6 +47,9 @@ typedef struct s_philo
 }	t_philo;
 
 //philostuffer.c
+void	*life_of_philo(void *args);
+void	get_forks(t_philo *philo);
+void	eat(t_philo *philo);
 t_philo *make_philo(t_rules *rules, int id);
 t_philo	*set_table(t_rules *rules);
 
@@ -70,7 +64,7 @@ pthread_mutex_t test_lock;
 //time.c
 unsigned long	timestamp(struct timeval start_clock);
 unsigned long	timeval_to_ms(struct timeval clock);
-void			mssleep(int ms);
+void			ms_sleep(int ms);
 
 /*
 external functions

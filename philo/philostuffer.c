@@ -6,15 +6,80 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:35:31 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/25 10:55:10 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/27 15:44:22 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-t_philo *make_philo(t_rules *rules, int id)
+void	*life_of_philo(void *args)
 {
-	t_philo *philo;
+	t_philo	*philo;
+	t_rules	rules;
+
+	philo = (t_philo *)args;
+	rules = *(philo->rules);
+	pthread_mutex_lock(&(philo->ate_mutex));
+	pthread_mutex_unlock(&(philo->ate_mutex));
+	if (philo->id & 1)
+		ms_sleep(5);
+	while (1)
+	{
+		get_forks(philo);
+		eat(philo);
+		pthread_mutex_lock(&(philo->ate_mutex));
+		if (philo->max_eat == 0)
+			break ;
+		pthread_mutex_unlock(&(philo->ate_mutex));
+		printf("%lu %u is sleeping\n", timestamp(rules.start_clock), philo->id);
+		ms_sleep(rules.ms_sleep);
+		printf("%lu %u is thinking\n", timestamp(rules.start_clock), philo->id);
+		ms_sleep(1);
+	}
+	pthread_mutex_unlock(&(philo->ate_mutex));
+	return (NULL);
+}
+
+void	get_forks(t_philo *philo)
+{
+	struct timeval	start_clock;
+
+	start_clock = philo->rules->start_clock;
+	if (philo->id & 1)
+	{
+		pthread_mutex_lock(philo->left);
+		printf("%lu %u has taken a fork\n", timestamp(start_clock), philo->id);
+		pthread_mutex_lock(philo->right);
+		printf("%lu %u has taken a fork\n", timestamp(start_clock), philo->id);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->right);
+		printf("%lu %u has taken a fork\n", timestamp(start_clock), philo->id);
+		pthread_mutex_lock(philo->left);
+		printf("%lu %u has taken a fork\n", timestamp(start_clock), philo->id);
+	}
+}
+
+void	eat(t_philo *philo)
+{
+	t_rules	rules;
+
+	rules = *(philo->rules);
+	printf("%lu %u is eating\n", timestamp(rules.start_clock), philo->id);
+	pthread_mutex_lock(&(philo->ate_mutex));
+	philo->ate_at = timestamp(rules.start_clock);
+	if (philo->max_eat > 0)
+		philo->max_eat--;
+	pthread_mutex_unlock(&(philo->ate_mutex));
+	ms_sleep(rules.ms_eat);
+	pthread_mutex_unlock(philo->left);
+	pthread_mutex_unlock(philo->right);
+}
+
+t_philo	*make_philo(t_rules *rules, int id)
+{
+	t_philo	*philo;
 
 	philo = malloc(sizeof(t_philo));
 	if (!philo)
@@ -25,7 +90,7 @@ t_philo *make_philo(t_rules *rules, int id)
 	philo->ate_at = 0;
 	philo->next = NULL;
 	philo->prev = NULL;
-	if (pthread_mutex_init(&philo->fork, NULL) 
+	if (pthread_mutex_init(&philo->fork, NULL)
 		|| pthread_mutex_init(&philo->ate_mutex, NULL))
 	{
 		free(philo);
@@ -37,9 +102,9 @@ t_philo *make_philo(t_rules *rules, int id)
 
 t_philo	*set_table(t_rules *rules)
 {
-	int	i;
-	t_philo *head;
-	t_philo *philos;
+	int		i;
+	t_philo	*head;
+	t_philo	*philos;
 
 	philos = make_philo(rules, 1);
 	if (!philos)

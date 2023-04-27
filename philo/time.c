@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 14:44:12 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/25 10:36:17 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/27 12:16:35 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ unsigned long	timeval_to_ms(struct timeval clock)
 	return ((clock.tv_sec * 1000) + (clock.tv_usec / 1000));
 }
 
-void	mssleep(int ms)
+void	ms_sleep(int ms)
 {
 	struct timeval	clock;
 
 	gettimeofday(&clock, NULL);
 	usleep((ms * 0.8) * 1000);
 	while (timestamp(clock) < ms)
-		;
+		usleep(500);
 }

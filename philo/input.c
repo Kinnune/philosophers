@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:27:23 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/24 12:05:49 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/04/27 12:41:43 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	atoi_philo(const char *str)
 
 int	parse_input(int argc, char **argv, t_rules *rules)
 {
-	int val_check;
+	int	val_check;
 
 	if (argc != 5 && argc != 6)
 		return (-1);
