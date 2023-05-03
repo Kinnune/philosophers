@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/27 15:10:02 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/05/03 14:52:26 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,45 +21,41 @@
 
 typedef struct s_rules
 {
-	unsigned int num_phil;
-	unsigned int ms_die;
-	unsigned int ms_eat;
-	unsigned int ms_sleep;
-	int max_eat;
-	unsigned long start_ms;
-	pthread_mutex_t	start_mutex;
-	struct timeval start_clock;
+	int				num_phil;
+	int				ms_die;
+	int				ms_eat;
+	int				ms_sleep;
+	int				max_eat;
+	long			start_ms;
+	pthread_mutex_t	*start_mutex;
+	struct timeval	start_clock;
 }	t_rules;
 
 typedef struct s_philo
 {
-	unsigned int id;
-	t_rules *rules;
-	int max_eat;
-	unsigned long ate_at;
+	int	id;
+	t_rules			*rules;
+	int				max_eat;
+	long	ate_at;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	ate_mutex;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
-	pthread_t thread_id;
+	pthread_t		thread_id;
 	struct s_philo	*next;
 	struct s_philo	*prev;
 }	t_philo;
 
 //philostuffer.c
-void	*life_of_philo(void *args);
-void	get_forks(t_philo *philo);
-void	eat(t_philo *philo);
-t_philo *make_philo(t_rules *rules, int id);
-t_philo	*set_table(t_rules *rules);
+void			*life_of_philo(void *args);
+void			get_forks(t_philo *philo);
+void			eat(t_philo *philo);
+t_philo			*make_philo(t_rules *rules, int id);
+t_philo			*set_table(t_rules *rules);
 
 //input.c
-int	atoi_philo(const char *str);
-int	parse_input(int argc, char **argv, t_rules *rules);
-
-//testing.c
-void	*test_print();
-pthread_mutex_t test_lock;
+int				atoi_philo(const char *str);
+int				parse_input(int argc, char **argv, t_rules *rules);
 
 //time.c
 unsigned long	timestamp(struct timeval start_clock);
@@ -84,9 +80,6 @@ external functions
 	pthread_mutex_destroy
 	pthread_mutex_lock
 	pthread_mutex_unlock
-
-filo & 1 ottaa ensin vasemman
-
 */
 
-# endif
+#endif

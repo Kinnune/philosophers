@@ -1,11 +1,11 @@
 
 NAME = philo
 
-CFILES = main.c input.c philostuffer.c testing.c time.c
+CFILES = main.c input.c philostuffer.c time.c
 
 OFILES = $(CFILES:.c=.o)
 
-CFLAGS = -c#-Wall -Werror -Wextra -c
+CFLAGS = -Wall -Werror -Wextra -c
 
 all: $(NAME)
 

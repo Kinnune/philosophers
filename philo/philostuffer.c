@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:35:31 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/27 15:44:22 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/05/03 14:52:32 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	*life_of_philo(void *args)
 
 	philo = (t_philo *)args;
 	rules = *(philo->rules);
-	pthread_mutex_lock(&(philo->ate_mutex));
-	pthread_mutex_unlock(&(philo->ate_mutex));
+	pthread_mutex_lock(rules.start_mutex);
+	pthread_mutex_unlock(rules.start_mutex);
 	if (philo->id & 1)
 		ms_sleep(5);
 	while (1)
