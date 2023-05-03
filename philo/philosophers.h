@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/05/03 14:52:26 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/05/03 15:00:47 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ typedef struct s_rules
 
 typedef struct s_philo
 {
-	int	id;
+	int				id;
 	t_rules			*rules;
 	int				max_eat;
-	long	ate_at;
+	long			ate_at;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	ate_mutex;
 	pthread_mutex_t	*left;
