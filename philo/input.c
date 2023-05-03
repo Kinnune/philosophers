@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:27:23 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/04/24 12:05:49 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/05/03 11:32:07 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	atoi_philo(const char *str)
 		if (value * 10 < value)
 			return (-1);
 		value *= 10;
-		value += *str - '0';
+		value += (*str) - '0';
 		str++;
 	}
 	if (*str != '\0')
@@ -41,40 +41,32 @@ int	atoi_philo(const char *str)
 
 int	parse_input(int argc, char **argv, t_rules *rules)
 {
-	int val_check;
-
 	if (argc != 5 && argc != 6)
 		return (-1);
-	argv++;
-	val_check = atoi_philo(*argv);
-	if (val_check < 0)
+	rules->num_phil = atoi_philo(*(argv + 1));
+	rules->ms_die = atoi_philo(*(argv + 2));
+	rules->ms_eat = atoi_philo(*(argv + 3));
+	rules->ms_sleep = atoi_philo(*(argv + 4));
+	if (rules->num_phil < 0 || rules->ms_die < 0
+		|| rules->ms_eat < 0 || rules->ms_sleep < 0)
 		return (-1);
-	rules->num_phil = val_check;
-	argv++;
-	val_check = atoi_philo(*argv);
-	if (val_check < 0)
-		return (-1);
-	rules->ms_die = val_check;
-	argv++;
-	val_check = atoi_philo(*argv);
-	if (val_check < 0)
-		return (-1);
-	rules->ms_eat = val_check;
-	argv++;
-	val_check = atoi_philo(*argv);
-	if (val_check < 0)
-		return (-1);
-	rules->ms_sleep = val_check;
-	argv++;
-	if (*argv)
+	if (*(argv + 5))
 	{
-		val_check = atoi_philo(*argv);
-		if (val_check < 0)
+		rules->max_eat = atoi_philo(*(argv + 5));
+		if (rules->max_eat < 0)
 			return (-1);
-		rules->max_eat = val_check;
 	}
 	else
 		rules->max_eat = -1;
-	pthread_mutex_init(&rules->start_mutex, NULL);
 	return (0);
 }
+	// printf("[%s]", *(argv + 1));
+	// printf("[%s]", *(argv + 2));
+	// printf("[%s]", *(argv + 3));
+	// printf("[%s]", *(argv + 4));
+	// printf("[%s]", *(argv + 5));
+	// printf("{%u}", rules->num_phil);
+	// printf("{%u}", rules->ms_die);
+	// printf("{%u}", rules->ms_eat);
+	// printf("{%u}", rules->ms_sleep);
+	// printf("{%d}", rules->max_eat);
