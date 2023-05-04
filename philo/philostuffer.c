@@ -6,76 +6,11 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:35:31 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/05/03 14:52:32 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/05/04 15:11:32 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-void	*life_of_philo(void *args)
-{
-	t_philo	*philo;
-	t_rules	rules;
-
-	philo = (t_philo *)args;
-	rules = *(philo->rules);
-	pthread_mutex_lock(rules.start_mutex);
-	pthread_mutex_unlock(rules.start_mutex);
-	if (philo->id & 1)
-		ms_sleep(5);
-	while (1)
-	{
-		get_forks(philo);
-		eat(philo);
-		pthread_mutex_lock(&(philo->ate_mutex));
-		if (philo->max_eat == 0)
-			break ;
-		pthread_mutex_unlock(&(philo->ate_mutex));
-		printf("%lu %u is sleeping\n", timestamp(rules.start_clock), philo->id);
-		ms_sleep(rules.ms_sleep);
-		printf("%lu %u is thinking\n", timestamp(rules.start_clock), philo->id);
-		ms_sleep(1);
-	}
-	pthread_mutex_unlock(&(philo->ate_mutex));
-	return (NULL);
-}
-
-void	get_forks(t_philo *philo)
-{
-	struct timeval	start_clock;
-
-	start_clock = philo->rules->start_clock;
-	if (philo->id & 1)
-	{
-		pthread_mutex_lock(philo->left);
-		printf("%lu %u has taken a fork\n", timestamp(start_clock), philo->id);
-		pthread_mutex_lock(philo->right);
-		printf("%lu %u has taken a fork\n", timestamp(start_clock), philo->id);
-	}
-	else
-	{
-		pthread_mutex_lock(philo->right);
-		printf("%lu %u has taken a fork\n", timestamp(start_clock), philo->id);
-		pthread_mutex_lock(philo->left);
-		printf("%lu %u has taken a fork\n", timestamp(start_clock), philo->id);
-	}
-}
-
-void	eat(t_philo *philo)
-{
-	t_rules	rules;
-
-	rules = *(philo->rules);
-	printf("%lu %u is eating\n", timestamp(rules.start_clock), philo->id);
-	pthread_mutex_lock(&(philo->ate_mutex));
-	philo->ate_at = timestamp(rules.start_clock);
-	if (philo->max_eat > 0)
-		philo->max_eat--;
-	pthread_mutex_unlock(&(philo->ate_mutex));
-	ms_sleep(rules.ms_eat);
-	pthread_mutex_unlock(philo->left);
-	pthread_mutex_unlock(philo->right);
-}
 
 t_philo	*make_philo(t_rules *rules, int id)
 {
@@ -100,6 +35,19 @@ t_philo	*make_philo(t_rules *rules, int id)
 	return (philo);
 }
 
+void	*free_the_philos(t_philo *philo)
+{
+	t_philo	*prev;
+
+	prev = philo->prev;
+	while (philo)
+	{
+		free(philo);
+		philo = philo->prev;
+	}
+	return (NULL);
+}
+
 t_philo	*set_table(t_rules *rules)
 {
 	int		i;
@@ -115,10 +63,7 @@ t_philo	*set_table(t_rules *rules)
 	{
 		philos->next = make_philo(rules, i + 2);
 		if (!philos->next)
-		{
-			//free_the_list()
-			return (NULL);
-		}
+			return (free_the_philos(philos));
 		philos->next->prev = philos;
 		philos = philos->next;
 		philos->left = &philos->prev->fork;
@@ -128,4 +73,17 @@ t_philo	*set_table(t_rules *rules)
 	head->prev = philos;
 	head->left = &head->prev->fork;
 	return (head);
+}
+
+int	create_threads(t_philo *philo, t_rules *rules)
+{
+	while (philo->id != rules->num_phil)
+	{
+		if (pthread_create(&(philo->thread_id), NULL, life_of_philo, philo))
+			return (-1);
+		philo = philo->next;
+	}
+	if (pthread_create(&(philo->thread_id), NULL, life_of_philo, philo))
+		return (-1);
+	return (0);
 }

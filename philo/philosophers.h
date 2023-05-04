@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/05/03 15:00:47 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:45:50 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,17 @@ typedef struct s_philo
 	struct s_philo	*prev;
 }	t_philo;
 
-//philostuffer.c
+//simulation.c
+void			monitor_loop(t_philo *philo, t_rules *rules);
 void			*life_of_philo(void *args);
 void			get_forks(t_philo *philo);
 void			eat(t_philo *philo);
+
+//philostuffer.c
 t_philo			*make_philo(t_rules *rules, int id);
+void			*free_the_philos(t_philo *philo);
 t_philo			*set_table(t_rules *rules);
+int				create_threads(t_philo *philo, t_rules *rules);
 
 //input.c
 int				atoi_philo(const char *str);
@@ -61,25 +66,5 @@ int				parse_input(int argc, char **argv, t_rules *rules);
 unsigned long	timestamp(struct timeval start_clock);
 unsigned long	timeval_to_ms(struct timeval clock);
 void			ms_sleep(int ms);
-
-/*
-external functions
-
-	memset
-	printf
-	malloc
-	free
-	write
-	usleep
-	gettimeofday
-
-	pthread_create
-	pthread_detach
-	pthread_join
-	pthread_mutex_init
-	pthread_mutex_destroy
-	pthread_mutex_lock
-	pthread_mutex_unlock
-*/
 
 #endif
