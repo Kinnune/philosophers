@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:27:23 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/05/03 11:32:07 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/05/19 13:00:14 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,3 @@ int	parse_input(int argc, char **argv, t_rules *rules)
 		rules->max_eat = -1;
 	return (0);
 }
-	// printf("[%s]", *(argv + 1));
-	// printf("[%s]", *(argv + 2));
-	// printf("[%s]", *(argv + 3));
-	// printf("[%s]", *(argv + 4));
-	// printf("[%s]", *(argv + 5));
-	// printf("{%u}", rules->num_phil);
-	// printf("{%u}", rules->ms_die);
-	// printf("{%u}", rules->ms_eat);
-	// printf("{%u}", rules->ms_sleep);
-	// printf("{%d}", rules->max_eat);

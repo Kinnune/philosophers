@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:33:46 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/05/04 11:38:48 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/05/19 12:56:10 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void	monitor_loop(t_philo *philo, t_rules *rules)
 		usleep(10);
 	}
 	if (full_philos != rules->num_phil)
+	{
+		ms_sleep(1);
 		printf("%lu %d died\n", timestamp(rules->start_clock), philo->id);
+	}
 }
 
 void	*life_of_philo(void *args)
