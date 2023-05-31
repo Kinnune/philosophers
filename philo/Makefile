@@ -1,7 +1,7 @@
 
 NAME = philo
 
-CFILES = main.c input.c philostuffer.c time.c
+CFILES = main.c input.c philostuffer.c time.c simulation.c
 
 OFILES = $(CFILES:.c=.o)
 
@@ -23,4 +23,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re
