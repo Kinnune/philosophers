@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:33:46 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/05/19 12:56:10 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/06/01 14:36:01 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	monitor_loop(t_philo *philo, t_rules *rules)
 		pthread_mutex_unlock(&(philo->ate_mutex));
 		philo = philo->next;
 		usleep(10);
+		pthread_mutex_lock(&(philo->ate_mutex));
 	}
 	if (full_philos != rules->num_phil)
 	{
@@ -53,6 +54,7 @@ void	*life_of_philo(void *args)
 	{
 		eat(philo);
 		pthread_mutex_lock(&(philo->ate_mutex));
+		//probs dont break here lol
 		if (philo->max_eat == 0)
 			break ;
 		pthread_mutex_unlock(&(philo->ate_mutex));
