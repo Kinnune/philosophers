@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:33:46 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/06/01 14:36:01 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:28:20 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,9 @@ void	*life_of_philo(void *args)
 		ms_sleep(5);
 	while (1)
 	{
-		eat(philo);
 		pthread_mutex_lock(&(philo->ate_mutex));
-		//probs dont break here lol
-		if (philo->max_eat == 0)
-			break ;
 		pthread_mutex_unlock(&(philo->ate_mutex));
+		eat(philo);
 		printf("%lu %u is sleeping\n", timestamp(rules.start_clock), philo->id);
 		ms_sleep(rules.ms_sleep);
 		printf("%lu %u is thinking\n", timestamp(rules.start_clock), philo->id);
@@ -97,10 +94,12 @@ void	eat(t_philo *philo)
 	printf("%lu %u is eating\n", timestamp(rules.start_clock), philo->id);
 	pthread_mutex_lock(&(philo->ate_mutex));
 	philo->ate_at = timestamp(rules.start_clock);
+	pthread_mutex_unlock(&(philo->ate_mutex));
+	ms_sleep(rules.ms_eat);
+	pthread_mutex_lock(&(philo->ate_mutex));
 	if (philo->max_eat > 0)
 		philo->max_eat--;
 	pthread_mutex_unlock(&(philo->ate_mutex));
-	ms_sleep(rules.ms_eat);
 	pthread_mutex_unlock(philo->left);
 	pthread_mutex_unlock(philo->right);
 }

@@ -6,11 +6,24 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:23:53 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/05/04 11:51:51 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:44:38 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+void	free_philos(t_philo *philo)
+{
+	t_philo	*temp;
+
+	while (philo->id < philo->rules->num_phil)
+	{
+		temp = philo->next;
+		free(philo);
+		philo = temp;
+	}
+	free(philo);
+}
 
 int	main(int argc, char **argv)
 {
