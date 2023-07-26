@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:23:53 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/06/15 15:44:38 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/07/25 15:07:56 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,34 @@ void	free_philos(t_philo *philo)
 		philo = temp;
 	}
 	free(philo);
+}
+
+void	clean_up(t_philo *philo, t_rules *rules, int i, unsigned long time)
+{
+	t_philo	*next;
+
+	while (i < rules->num_phil)
+	{
+		pthread_join(philo->thread_id, NULL);
+		philo = philo->next;
+		i++;
+	}
+	i = 0;
+	while (i < rules->num_phil)
+	{
+		if (philo->id < rules->num_phil)
+			next = philo->next;
+		else
+			next = NULL;
+		pthread_mutex_destroy(&philo->ate_mutex);
+		pthread_mutex_destroy(&philo->fork);
+		free(philo);
+		if (next)
+			philo = next;
+		i++;
+	}
+	if (rules->death > 0)
+		printf("%lu %d died\n", time, rules->death);
 }
 
 int	main(int argc, char **argv)
@@ -45,5 +73,6 @@ int	main(int argc, char **argv)
 		return (1);
 	pthread_mutex_unlock(rules.start_mutex);
 	monitor_loop(philo, &rules);
+	clean_up(philo, &rules, 0, timestamp(rules.start_clock));
 	return (0);
 }

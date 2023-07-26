@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:27:23 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/05/19 13:00:14 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/07/24 18:40:02 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	parse_input(int argc, char **argv, t_rules *rules)
 {
 	if (argc != 5 && argc != 6)
 		return (-1);
+	rules->death = 0;
 	rules->num_phil = atoi_philo(*(argv + 1));
 	rules->ms_die = atoi_philo(*(argv + 2));
 	rules->ms_eat = atoi_philo(*(argv + 3));

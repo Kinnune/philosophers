@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:08:37 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/06/15 14:53:55 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/07/24 19:18:41 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 typedef struct s_rules
 {
 	int				num_phil;
+	int				death;
 	int				ms_die;
 	int				ms_eat;
 	int				ms_sleep;
@@ -48,15 +49,16 @@ typedef struct s_philo
 
 //simulation.c
 void			monitor_loop(t_philo *philo, t_rules *rules);
+t_philo			*set_table(t_rules *rules);
+int				create_threads(t_philo *philo, t_rules *rules);
+
+//philostuffer.c
+int		print_action(char *action, t_philo *philo);
+t_philo			*make_philo(t_rules *rules, int id);
+void			*free_the_philos(t_philo *philo);
 void			*life_of_philo(void *args);
 void			get_forks(t_philo *philo);
 void			eat(t_philo *philo);
-
-//philostuffer.c
-t_philo			*make_philo(t_rules *rules, int id);
-void			*free_the_philos(t_philo *philo);
-t_philo			*set_table(t_rules *rules);
-int				create_threads(t_philo *philo, t_rules *rules);
 
 //input.c
 int				atoi_philo(const char *str);
