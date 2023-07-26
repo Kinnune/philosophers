@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.c                                            :+:      :+:    :+:   */
+/*   aux.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:27:23 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/07/24 18:40:02 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/07/26 11:37:06 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,41 @@ int	parse_input(int argc, char **argv, t_rules *rules)
 	else
 		rules->max_eat = -1;
 	return (0);
+}
+
+void	*free_the_philos(t_philo *philo)
+{
+	t_philo	*prev;
+
+	prev = philo->prev;
+	while (philo)
+	{
+		free(philo);
+		philo = philo->prev;
+	}
+	return (NULL);
+}
+
+int	print_action(char *action, t_philo *philo)
+{
+	pthread_mutex_lock(philo->rules->start_mutex);
+	if (philo->rules->death)
+	{
+		pthread_mutex_unlock(philo->rules->start_mutex);
+		return (-1);
+	}
+	printf("%lu %u %s\n",
+		timestamp(philo->rules->start_clock), philo->id, action);
+	pthread_mutex_unlock(philo->rules->start_mutex);
+	return (0);
+}
+
+int	death(t_rules rules)
+{
+	int	ret;
+
+	pthread_mutex_lock(rules.start_mutex);
+	ret = rules.death;
+	pthread_mutex_unlock(rules.start_mutex);
+	return (ret);
 }

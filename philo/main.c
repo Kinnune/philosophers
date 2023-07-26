@@ -6,24 +6,11 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 14:23:53 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/07/25 15:07:56 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/07/26 10:45:00 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-void	free_philos(t_philo *philo)
-{
-	t_philo	*temp;
-
-	while (philo->id < philo->rules->num_phil)
-	{
-		temp = philo->next;
-		free(philo);
-		philo = temp;
-	}
-	free(philo);
-}
 
 void	clean_up(t_philo *philo, t_rules *rules, int i, unsigned long time)
 {

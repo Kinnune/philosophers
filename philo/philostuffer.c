@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:35:31 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/07/25 15:22:10 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/07/26 11:32:01 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,43 +35,6 @@ t_philo	*make_philo(t_rules *rules, int id)
 	return (philo);
 }
 
-void	*free_the_philos(t_philo *philo)
-{
-	t_philo	*prev;
-
-	prev = philo->prev;
-	while (philo)
-	{
-		free(philo);
-		philo = philo->prev;
-	}
-	return (NULL);
-}
-
-int		print_action(char *action, t_philo *philo)
-{
-	pthread_mutex_lock(philo->rules->start_mutex);
-	if (philo->rules->death)
-	{
-		pthread_mutex_unlock(philo->rules->start_mutex);
-		return (-1);
-	}
-	printf("%lu %u %s\n",
-		timestamp(philo->rules->start_clock), philo->id, action);
-	pthread_mutex_unlock(philo->rules->start_mutex);
-	return (0);
-}
-
-int death(t_rules rules)
-{
-	int ret;
-
-	pthread_mutex_lock(rules.start_mutex);
-	ret = rules.death;
-	pthread_mutex_unlock(rules.start_mutex);
-	return (ret);	
-}
-
 void	*life_of_philo(void *args)
 {
 	t_philo	*philo;
@@ -95,7 +58,7 @@ void	*life_of_philo(void *args)
 	return (NULL);
 }
 
-void	get_forks(t_philo *philo)
+int	get_forks(t_philo *philo)
 {
 	struct timeval	start_clock;
 
@@ -104,6 +67,11 @@ void	get_forks(t_philo *philo)
 	{
 		pthread_mutex_lock(philo->left);
 		print_action("has taken a fork", philo);
+		if (philo->rules->num_phil == 1)
+		{
+			pthread_mutex_unlock(philo->left);
+			ms_sleep(philo->rules->ms_die);
+		}
 		pthread_mutex_lock(philo->right);
 		print_action("has taken a fork", philo);
 	}
@@ -114,6 +82,7 @@ void	get_forks(t_philo *philo)
 		pthread_mutex_lock(philo->left);
 		print_action("has taken a fork", philo);
 	}
+	return (0);
 }
 
 void	eat(t_philo *philo)

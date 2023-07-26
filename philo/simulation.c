@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:33:46 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/07/25 15:20:36 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/07/26 11:32:22 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,16 @@ void	monitor_loop(t_philo *philo, t_rules *rules)
 	}
 	pthread_mutex_unlock(&(philo->ate_mutex));
 	if (full_philos != rules->num_phil)
-	{
-		pthread_mutex_lock(rules->start_mutex);
-		rules->death = philo->id;
-		pthread_mutex_unlock(rules->start_mutex);
-	}
+		log_death(philo->id, rules);
 	else
-	{
-		pthread_mutex_lock(rules->start_mutex);
-		rules->death = philo->id * -1;
-		pthread_mutex_unlock(rules->start_mutex);
-	}
+		log_death(philo->id * -1, rules);
+}
+
+void	log_death(int num, t_rules *rules)
+{
+	pthread_mutex_lock(rules->start_mutex);
+	rules->death = num;
+	pthread_mutex_unlock(rules->start_mutex);
 }
 
 t_philo	*set_table(t_rules *rules)
