@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:27:23 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/07/26 11:37:06 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/07/26 14:48:25 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void	*free_the_philos(t_philo *philo)
 	prev = philo->prev;
 	while (philo)
 	{
+		pthread_mutex_destroy(&philo->fork);
+		pthread_mutex_destroy(&philo->ate_mutex);
 		free(philo);
 		philo = philo->prev;
 	}

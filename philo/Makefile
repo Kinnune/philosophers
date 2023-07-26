@@ -5,11 +5,12 @@ CFILES = main.c aux.c philostuffer.c time.c simulation.c
 
 OFILES = $(CFILES:.c=.o)
 
+CFLAGS = -c -Wall -Werror -Wextra
 
 all: $(NAME)
 
 $(OFILES): $(CFILES)
-	cc -c $(CFLAGS) $^
+	cc $(CFLAGS) $^
 
 $(NAME): $(OFILES)
 	cc -o $(NAME) $(OFILES)

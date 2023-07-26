@@ -6,7 +6,7 @@
 /*   By: ekinnune <ekinnune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:35:31 by ekinnune          #+#    #+#             */
-/*   Updated: 2023/07/26 11:32:01 by ekinnune         ###   ########.fr       */
+/*   Updated: 2023/07/26 12:19:40 by ekinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	*life_of_philo(void *args)
 		ms_sleep(rules.ms_sleep);
 		if (print_action("is thinking", philo) < 0)
 			break ;
+		ms_sleep(1);
 	}
 	return (NULL);
 }
